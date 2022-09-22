@@ -217,6 +217,10 @@ func (server *Server) setupHandlers(ctx context.Context, cancel context.CancelFu
 	siteMux.HandleFunc(pathPrefix+"auth_token.js", server.handleAuthToken)
 	siteMux.HandleFunc(pathPrefix+"config.js", server.handleConfig)
 
+	if pathPrefix != "/" {
+		siteMux.Handle("/", http.RedirectHandler(pathPrefix, http.StatusSeeOther))
+	}
+
 	siteHandler := http.Handler(siteMux)
 
 	if server.options.EnableBasicAuth {
